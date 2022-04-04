@@ -134,4 +134,41 @@ public class FinalAssignmentFileReader {
 			} catch (FileNotFoundException e) {} catch (NullPointerException e) {}
 	    	return edgeWeightedDigraph;
 		}
+		
+		public static TST readStopNames()
+		{
+			TST tst = new TST();
+	    	FileReader fileReader;
+			try {
+				fileReader = new FileReader("stops.txt");
+				Scanner myScanner = new Scanner(fileReader);
+				myScanner.useDelimiter(",|\\n");
+				for(int i = 0; i < 10; i++)
+				{
+					myScanner.next();
+				}
+	        	while(myScanner.hasNext())
+				{
+	        		int stopNumber = myScanner.nextInt();
+	        		myScanner.next();
+	        		
+	        		String stopName = myScanner.next();
+	        		if(stopName.substring(0, 8).equalsIgnoreCase("FLAGSTOP"))
+	        		{
+	        			stopName = stopName.substring(9, stopName.length()) + " " + stopName.substring(0, 8);
+	        		}
+	        		if(stopName.substring(0, 2).equalsIgnoreCase("EB") || stopName.substring(0, 2).equalsIgnoreCase("WB") || stopName.substring(0, 2).equalsIgnoreCase("NB") || stopName.substring(0, 2).equalsIgnoreCase("SB"))
+	        		{
+	        			stopName = stopName.substring(3, stopName.length()) + " " + stopName.substring(0, 2);
+	        		}
+					for(int i = 0; i < 7; i++)
+					{
+						myScanner.next();
+					}
+					tst.put(stopName, stopNumber);
+				}
+				myScanner.close();
+			} catch (FileNotFoundException e) {} catch (NullPointerException e) {}
+	    	return tst;
+		}
 }

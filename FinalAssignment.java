@@ -4,35 +4,19 @@ public class FinalAssignment {
 
 	public static void main(String[] args) {
 		List[] edgeWeightedDigraph = FinalAssignmentFileReader.readStops();
-		edgeWeightedDigraph = FinalAssignmentFileReader.readTransfers(edgeWeightedDigraph);
 		edgeWeightedDigraph = FinalAssignmentFileReader.readStopTimes(edgeWeightedDigraph);
-		System.out.println("" + edgeWeightedDigraph[646].toString());
-		System.out.println("" + edgeWeightedDigraph[647].toString());
-		System.out.println("" + edgeWeightedDigraph[381].toString());
-		/*for(int i = 0; i < edgeWeightedDigraph.length; i++)
+		edgeWeightedDigraph = FinalAssignmentFileReader.readTransfers(edgeWeightedDigraph);
+		TST tst = FinalAssignmentFileReader.readStopNames();
+		Queue queue = tst.keysWithPrefix("HASTINGS");
+		
+		System.out.println("Results of search: ");
+		while(queue.start != null)
 		{
-			if(edgeWeightedDigraph[i] != null)
-			{
-				System.out.println("" + edgeWeightedDigraph[i].toString());
-			}
-		}*/
-		int[] edgeTo = new int[edgeWeightedDigraph.length];
-		double[] distTo = dijkstra(edgeWeightedDigraph, edgeTo, 646);
-		System.out.println("The cost from 646 to 1269 is " + distTo[1269] + ".");
-		int index = 1269;
-		System.out.print("The stops en route are: " + index + ", ");
-		while(edgeTo[index] != -1)
-		{
-			System.out.print("" + edgeTo[index]);
-			index = edgeTo[index];
-			if(edgeTo[index] == -1)
-			{
-				System.out.println(".");
-			}
-			else
-			{
-				System.out.print(", ");
-			}
+			String stopName = queue.dequeue().val;
+			int stopNumber = (int) tst.get(stopName);
+			System.out.println("Stop Name: " + stopName + ", Stop Number: " + stopNumber);
+			System.out.println("Stop Information: ");
+			System.out.println("" + edgeWeightedDigraph[stopNumber].toString() + "\n");
 		}
 	}
 	

@@ -66,11 +66,35 @@ public class List {
 		else
 		{
 			DirectedEdge currentEdge = start;
-			returnString += "From " + currentEdge.stopFrom + " to " + currentEdge.stopTo + " with a distance of " + currentEdge.weight + "m.\n";
+			returnString += "From " + currentEdge.stopFrom + " to " + currentEdge.stopTo + " as a";
+			if(currentEdge.weight == 1)
+			{
+				returnString += " bus journey one stop away.\n";
+			}
+			else if(currentEdge.weight == 2)
+			{
+				returnString += "n instantaneous transfer.\n";
+			}
+			else
+			{
+				returnString += " transfer of length " + currentEdge.weight + ".\n";
+			}
 			while(currentEdge.next != null)
 			{
 				currentEdge = currentEdge.next;
-				returnString += "From " + currentEdge.stopFrom + " to " + currentEdge.stopTo + " with a distance of " + currentEdge.weight + "m.\n";
+				returnString += "From " + currentEdge.stopFrom + " to " + currentEdge.stopTo + " as a";
+				if(currentEdge.weight == 1)
+				{
+					returnString += " bus journey one stop away.\n";
+				}
+				else if(currentEdge.weight == 2)
+				{
+					returnString += "n instantaneous transfer.\n";
+				}
+				else
+				{
+					returnString += " transfer of length " + currentEdge.weight + ".\n";
+				}
 			}
 		}
 		return returnString;
