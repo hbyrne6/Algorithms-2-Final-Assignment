@@ -6,9 +6,9 @@ public class FinalAssignmentFileReader {
 	//Creates an array of lists to create an adjacency list
 		//Creates an array as large as the maximum stop number, however,
 		//if a stop does not exist, there is no list stored in the array reference
-		public static List[] readStops()
+		public static EdgeList[] readStops()
 		{
-			List[] array = null;
+			EdgeList[] array = null;
 	    	FileReader fileReaderOne;
 	    	FileReader fileReaderTwo;
 			try {
@@ -16,10 +16,7 @@ public class FinalAssignmentFileReader {
 				fileReaderTwo = new FileReader("stops.txt");
 				Scanner findMaxScanner = new Scanner(fileReaderOne);
 				findMaxScanner.useDelimiter(",|\\n");
-				for(int i = 0; i < 10; i++)
-				{
-					findMaxScanner.next();
-				}
+				findMaxScanner.nextLine();
 				int max = -1;
 				while(findMaxScanner.hasNext())
 				{
@@ -29,48 +26,36 @@ public class FinalAssignmentFileReader {
 						max = nextStopNumber;
 					}
 					
-					for(int i = 0; i < 9; i++)
-					{
-						findMaxScanner.next();
-					}
+					findMaxScanner.nextLine();
 				}
 				findMaxScanner.close();
 				System.out.println("Stop is " + max);
-				array = new List[max + 1];
+				array = new EdgeList[max + 1];
 				for(int index = 0; index  <  array.length; index++)
 	        	{
 	        		array[index] = null;
 	        	}
 				Scanner myScanner = new Scanner(fileReaderTwo);
 				myScanner.useDelimiter(",|\\n");
-				for(int i = 0; i < 10; i++)
-				{
-					myScanner.next();
-				}
+				myScanner.nextLine();
 	        	while(myScanner.hasNext())
 				{
-	        		array[myScanner.nextInt()] = new List();
-					for(int i = 0; i < 9; i++)
-					{
-						myScanner.next();
-					}
+	        		array[myScanner.nextInt()] = new EdgeList();
+	        		myScanner.nextLine();
 				}
 				myScanner.close();
 			} catch (FileNotFoundException e) {} catch (NullPointerException e) {}
 	    	return array;
 		}
 		
-		public static List[] readTransfers(List[] edgeWeightedDigraph)
+		public static EdgeList[] readTransfers(EdgeList[] edgeWeightedDigraph)
 		{
 	    	FileReader EWD;
 			try {
 				EWD = new FileReader("transfers.txt");
 				Scanner myScanner = new Scanner(EWD);
 				myScanner.useDelimiter(",|\\n");
-				for(int i = 0; i < 4; i++)
-				{
-					myScanner.next();
-				}
+				myScanner.nextLine();
 	        	while(myScanner.hasNext())
 				{
 	        		int stopFrom = myScanner.nextInt();
@@ -91,7 +76,7 @@ public class FinalAssignmentFileReader {
 	    	return edgeWeightedDigraph;
 		}
 		
-		public static List[] readStopTimes(List[] edgeWeightedDigraph)
+		public static EdgeList[] readStopTimes(EdgeList[] edgeWeightedDigraph)
 		{
 	    	FileReader EWD;
 			try {
@@ -108,10 +93,7 @@ public class FinalAssignmentFileReader {
 				int stopTo = myScanner.nextInt();
 				int lastTripID;
 				int stopFrom;
-				for(int i = 0; i < 5; i++)
-				{
-					myScanner.next();
-				}
+				myScanner.nextLine();
 				
 	        	while(myScanner.hasNext())
 				{
@@ -121,10 +103,7 @@ public class FinalAssignmentFileReader {
 					myScanner.next();
 					myScanner.next();
 					stopTo = myScanner.nextInt();
-					for(int i = 0; i < 5; i++)
-					{
-						myScanner.next();
-					}
+					myScanner.nextLine();
 	        		if(lastTripID == tripID)
 	        		{
 	        			edgeWeightedDigraph[stopFrom].addToList(stopFrom, stopTo, 1);
@@ -143,10 +122,7 @@ public class FinalAssignmentFileReader {
 				fileReader = new FileReader("stops.txt");
 				Scanner myScanner = new Scanner(fileReader);
 				myScanner.useDelimiter(",|\\n");
-				for(int i = 0; i < 10; i++)
-				{
-					myScanner.next();
-				}
+				myScanner.nextLine();
 	        	while(myScanner.hasNext())
 				{
 	        		int stopNumber = myScanner.nextInt();
@@ -161,14 +137,82 @@ public class FinalAssignmentFileReader {
 	        		{
 	        			stopName = stopName.substring(3, stopName.length()) + " " + stopName.substring(0, 2);
 	        		}
-					for(int i = 0; i < 7; i++)
-					{
-						myScanner.next();
-					}
+	        		myScanner.nextLine();
 					tst.put(stopName, stopNumber);
 				}
 				myScanner.close();
 			} catch (FileNotFoundException e) {} catch (NullPointerException e) {}
 	    	return tst;
+		}
+		
+		public static StopList[] readStopTimes()
+		{
+			StopList[] stopList = new StopList[24*60*60];
+			for(int i = 0; i < stopList.length;i++)
+			{
+				stopList[i] = new StopList();
+			}
+	    	FileReader fileReader;
+			try {
+				int previousStop = -2;
+				int currentStop = -1;
+				int nextStop = 0;
+				int currentTime = 0;
+				int nextTime = 0;
+				int previousTrip = -2;
+				int currentTrip = -1;
+				int nextTrip = 0;
+				fileReader = new FileReader("stop_times.txt");
+				Scanner myScanner = new Scanner(fileReader);
+				myScanner.useDelimiter(",\\s|:|,|\\n");
+				myScanner.nextLine();
+	        	while(myScanner.hasNext())
+				{
+	        		
+	        		previousTrip = currentTrip;
+	        		currentTrip = nextTrip;
+	        		nextTrip = myScanner.nextInt();
+	        		
+	        		currentTime = nextTime;
+	        		
+	        		int hour =  myScanner.nextInt();
+	        		int minute = myScanner.nextInt();
+	        		int second = myScanner.nextInt();
+	        		if(hour < 24 && hour > 0)
+	        		{
+	        			nextTime = (hour * 60 * 60) + (minute * 60) + second;
+	        		}
+	        		else
+	        		{
+	        			nextTime = -1;
+	        		}
+	        		
+	        		myScanner.nextInt();
+	        		myScanner.nextInt();
+	        		myScanner.nextInt();
+	        		
+	        		previousStop = currentStop;
+	        		currentStop = nextStop;
+	        		nextStop = myScanner.nextInt();
+	        		if(currentTime != -1)
+	        		{
+	        			if(previousTrip == currentTrip && currentTrip == nextTrip)
+		        		{
+		        			stopList[currentTime].addToList(previousStop, currentStop, nextStop);
+		        		}
+		        		else if(previousTrip == currentTrip)
+		        		{
+		        			stopList[currentTime].addToList(previousStop, currentStop, -1);
+		        		}
+		        		else if(currentTrip == nextTrip)
+		        		{
+		        			stopList[currentTime].addToList(-1, currentStop, nextStop);
+		        		}
+	        		}
+	        		myScanner.nextLine();
+				}
+				myScanner.close();
+			} catch (FileNotFoundException e) {} catch (NullPointerException e) {}
+	    	return stopList;
 		}
 }

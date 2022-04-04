@@ -1,5 +1,5 @@
 
-public class List {
+public class EdgeList {
 	public static class DirectedEdge
     {
     	public int stopFrom;
@@ -23,7 +23,7 @@ public class List {
 	
 	DirectedEdge start;
 	
-	List()
+	EdgeList()
 	{
 		DirectedEdge start = null;
 	}
@@ -37,7 +37,7 @@ public class List {
 		else
 		{
 			DirectedEdge currentNode = start;
-			if(currentNode.stopFrom == stopFrom && currentNode.stopTo == stopTo)
+			if(currentNode.stopFrom == stopFrom && currentNode.stopTo == stopTo && currentNode.weight == weight)
 			{
 				return;
 			}

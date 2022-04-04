@@ -3,7 +3,7 @@
 public class FinalAssignment {
 
 	public static void main(String[] args) {
-		List[] edgeWeightedDigraph = FinalAssignmentFileReader.readStops();
+		/*EdgeList[] edgeWeightedDigraph = FinalAssignmentFileReader.readStops();
 		edgeWeightedDigraph = FinalAssignmentFileReader.readStopTimes(edgeWeightedDigraph);
 		edgeWeightedDigraph = FinalAssignmentFileReader.readTransfers(edgeWeightedDigraph);
 		TST tst = FinalAssignmentFileReader.readStopNames();
@@ -17,10 +17,13 @@ public class FinalAssignment {
 			System.out.println("Stop Name: " + stopName + ", Stop Number: " + stopNumber);
 			System.out.println("Stop Information: ");
 			System.out.println("" + edgeWeightedDigraph[stopNumber].toString() + "\n");
-		}
+		}*/
+		
+		StopList[] stopList = FinalAssignmentFileReader.readStopTimes();
+		System.out.println("" + stopList[21360].toString());
 	}
 	
-	public static double[] dijkstra(List[] edgeWeightedDigraph, int[] edgeTo, int start)
+	public static double[] dijkstra(EdgeList[] edgeWeightedDigraph, int[] edgeTo, int start)
     {
     	double[] distTo = new double[edgeWeightedDigraph.length];
     	for(int index = 0; index <  distTo.length; index++)
@@ -48,8 +51,8 @@ public class FinalAssignment {
     		if(!visited[currentIntersection])
     		{
     			visited[currentIntersection] = true;
-        		List streetsFromIntersection = edgeWeightedDigraph[currentIntersection];
-        		List.DirectedEdge currentStreet = streetsFromIntersection.start;
+    			EdgeList streetsFromIntersection = edgeWeightedDigraph[currentIntersection];
+    			EdgeList.DirectedEdge currentStreet = streetsFromIntersection.start;
         		while(currentStreet != null)
         		{
         			relax(distTo, edgeTo, currentStreet);
@@ -61,7 +64,7 @@ public class FinalAssignment {
     	return distTo;
     }
     
-    public static void relax(double[] distTo, int[] edgeTo, List.DirectedEdge edge)
+    public static void relax(double[] distTo, int[] edgeTo, EdgeList.DirectedEdge edge)
     {
     	if(distTo[edge.stopTo] > (distTo[edge.stopFrom] + (edge.weight)))
     	{
