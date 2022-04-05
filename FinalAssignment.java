@@ -7,6 +7,7 @@ public class FinalAssignment {
 		edgeWeightedDigraph = FinalAssignmentFileReader.readStopTimes(edgeWeightedDigraph);
 		edgeWeightedDigraph = FinalAssignmentFileReader.readTransfers(edgeWeightedDigraph);
 		TST tst = FinalAssignmentFileReader.readStopNames();
+		StopInfoNode[] stopsInfo = FinalAssignmentFileReader.readStopInfo(edgeWeightedDigraph.length);
 		Queue queue = tst.keysWithPrefix("HASTINGS");
 		
 		System.out.println("Results of search: ");
@@ -16,11 +17,13 @@ public class FinalAssignment {
 			int stopNumber = (int) tst.get(stopName);
 			System.out.println("Stop Name: " + stopName + ", Stop Number: " + stopNumber);
 			System.out.println("Stop Information: ");
-			System.out.println("" + edgeWeightedDigraph[stopNumber].toString() + "\n");
-		}*/
+			System.out.println("" + stopsInfo[stopNumber].toString() + "\n");
+		}
 		
-		StopList[] stopList = FinalAssignmentFileReader.readStopTimes();
-		System.out.println("" + stopList[21360].toString());
+		//StopList[] stopList = FinalAssignmentFileReader.readStopTimes();
+		//System.out.println("" + stopList[21360].toString());*/
+		
+		FinalAssignmentFileReader.readStopTimes();
 	}
 	
 	public static double[] dijkstra(EdgeList[] edgeWeightedDigraph, int[] edgeTo, int start)

@@ -3,7 +3,7 @@ import java.io.FileReader;
 import java.util.Scanner;
 
 public class FinalAssignmentFileReader {
-	//Creates an array of lists to create an adjacency list
+		//Creates an array of lists to create an adjacency list
 		//Creates an array as large as the maximum stop number, however,
 		//if a stop does not exist, there is no list stored in the array reference
 		public static EdgeList[] readStops()
@@ -145,74 +145,146 @@ public class FinalAssignmentFileReader {
 	    	return tst;
 		}
 		
-		public static StopList[] readStopTimes()
+		public static TripInfoList[] readStopTimes()
 		{
-			StopList[] stopList = new StopList[24*60*60];
-			for(int i = 0; i < stopList.length;i++)
+			TripInfoList[] tripInfoList = new TripInfoList[24*60*60];
+			for(int i = 0; i < tripInfoList.length;i++)
 			{
-				stopList[i] = new StopList();
+				tripInfoList[i] = new TripInfoList();
 			}
 	    	FileReader fileReader;
 			try {
-				int previousStop = -2;
-				int currentStop = -1;
-				int nextStop = 0;
-				int currentTime = 0;
-				int nextTime = 0;
-				int previousTrip = -2;
-				int currentTrip = -1;
-				int nextTrip = 0;
+				int time = 0;
+				int stop = 0;
+				int previousTripID = 0;
+				int tripID = 0;
+				double distance = 0;
+				TripInfoList.TripInfo newTripInfo = null;
 				fileReader = new FileReader("stop_times.txt");
 				Scanner myScanner = new Scanner(fileReader);
 				myScanner.useDelimiter(",\\s|:|,|\\n");
 				myScanner.nextLine();
+				previousTripID = tripID;
+        		tripID = myScanner.nextInt();
+        		int hour =  myScanner.nextInt();
+        		int minute = myScanner.nextInt();
+        		int second = myScanner.nextInt();
+        		if(hour < 24 && hour > 0)
+        		{
+        			time = (hour * 60 * 60) + (minute * 60) + second;
+        		}
+        		else
+        		{
+        			time = -1;
+        		}
+        		
+        		myScanner.nextInt();
+        		myScanner.nextInt();
+        		myScanner.nextInt();
+        		stop = myScanner.nextInt();
+        		
+        		newTripInfo = new TripInfoList.TripInfo(tripID, time, stop);
+        		myScanner.nextLine();
 	        	while(myScanner.hasNext())
 				{
-	        		
-	        		previousTrip = currentTrip;
-	        		currentTrip = nextTrip;
-	        		nextTrip = myScanner.nextInt();
-	        		
-	        		currentTime = nextTime;
-	        		
-	        		int hour =  myScanner.nextInt();
-	        		int minute = myScanner.nextInt();
-	        		int second = myScanner.nextInt();
+        			while(myScanner.hasNext())
+    				{
+        				previousTripID = tripID;
+    	        		tripID = myScanner.nextInt();
+    	        		if(previousTripID != tripID)
+    	        		{
+    	        			break;
+    	        		}
+        				hour =  myScanner.nextInt();
+    	        		minute = myScanner.nextInt();
+    	        		second = myScanner.nextInt();
+    	        		if(hour < 24 && hour > 0)
+    	        		{
+    	        			time = (hour * 60 * 60) + (minute * 60) + second;
+    	        		}
+    	        		else
+    	        		{
+    	        			time = -1;
+    	        		}
+    	        		
+    	        		myScanner.nextInt();
+    	        		myScanner.nextInt();
+    	        		myScanner.nextInt();
+    	        		stop = myScanner.nextInt();
+    	        		
+    	        		myScanner.next();
+    	        		myScanner.next();
+    	        		myScanner.next();
+    	        		myScanner.next();
+    	        		distance = myScanner.nextDouble();
+    	        		
+    	        		if(time != -1)
+    	        		{
+    	        			newTripInfo.endTime = time;
+    	        			newTripInfo.totalDistance = distance;
+    	        			newTripInfo.stops.addToList(stop);
+    	        		}
+    				}
+        			for(int index = newTripInfo.startTime; index <= newTripInfo.endTime; index++)
+        			{
+        				tripInfoList[index].addTrip(newTripInfo);
+        			}
+	        		hour =  myScanner.nextInt();
+	        		minute = myScanner.nextInt();
+	        		second = myScanner.nextInt();
 	        		if(hour < 24 && hour > 0)
 	        		{
-	        			nextTime = (hour * 60 * 60) + (minute * 60) + second;
+	        			time = (hour * 60 * 60) + (minute * 60) + second;
 	        		}
 	        		else
 	        		{
-	        			nextTime = -1;
+	        			time = -1;
 	        		}
 	        		
 	        		myScanner.nextInt();
 	        		myScanner.nextInt();
 	        		myScanner.nextInt();
+	        		stop = myScanner.nextInt();
 	        		
-	        		previousStop = currentStop;
-	        		currentStop = nextStop;
-	        		nextStop = myScanner.nextInt();
-	        		if(currentTime != -1)
-	        		{
-	        			if(previousTrip == currentTrip && currentTrip == nextTrip)
-		        		{
-		        			stopList[currentTime].addToList(previousStop, currentStop, nextStop);
-		        		}
-		        		else if(previousTrip == currentTrip)
-		        		{
-		        			stopList[currentTime].addToList(previousStop, currentStop, -1);
-		        		}
-		        		else if(currentTrip == nextTrip)
-		        		{
-		        			stopList[currentTime].addToList(-1, currentStop, nextStop);
-		        		}
-	        		}
+	        		newTripInfo = new TripInfoList.TripInfo(tripID, time, stop);
 	        		myScanner.nextLine();
 				}
 				myScanner.close();
 			} catch (FileNotFoundException e) {} catch (NullPointerException e) {}
-	    	return stopList;
+	    	return tripInfoList;
+		}
+		
+		public static StopInfoNode[] readStopInfo(int maxStopNumberPlusOne)
+		{
+			StopInfoNode[] array = new StopInfoNode[maxStopNumberPlusOne];
+	    	FileReader fileReader;
+			try {
+				//stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,location_type,parent_station
+				fileReader = new FileReader("stops.txt");
+				Scanner myScanner = new Scanner(fileReader);
+				myScanner.useDelimiter(",|\\n");
+				myScanner.nextLine();
+	        	while(myScanner.hasNext())
+				{
+	        		int number = myScanner.nextInt();
+	        		String code = myScanner.next();
+	        		code = (code.equals(" ")) ? "None" : code;
+	        		String name = myScanner.next();
+	        		String description = myScanner.next();
+	        		double latitude = myScanner.nextDouble();
+	        		double longitude = myScanner.nextDouble();
+	        		String zone = myScanner.next();
+	        		String url = myScanner.next();
+	        		url = (url.equals(" ")) ? "None" : url;
+	        		String locationType = myScanner.next();
+	        		String parentStation = myScanner.next();
+	        		parentStation = (parentStation.equals("")) ? "None" : parentStation;
+	        		
+	        		array[number] = new StopInfoNode(number, code, name, description, latitude, longitude,
+	        								zone, url, locationType, parentStation);
+				}
+				myScanner.close();
+			} catch (FileNotFoundException e) {} catch (NullPointerException e) {}
+	    	return array;
 		}
 }
