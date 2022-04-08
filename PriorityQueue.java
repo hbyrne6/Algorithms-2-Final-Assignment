@@ -1,4 +1,4 @@
-
+//Priority queue used for Dijkstra's algorithm
 public class PriorityQueue {
 	public static class Stop
 	{
@@ -25,6 +25,8 @@ public class PriorityQueue {
 		
 	}
 	
+	//Iterates throught the list until it finds a number
+	//larger than it and inserts itself before it
 	public void addStop(int number, double distance)
 	{
 		Stop newStop = new Stop(number, distance);

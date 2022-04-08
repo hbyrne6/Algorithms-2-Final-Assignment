@@ -1,3 +1,5 @@
+//TST copied from https://algs4.cs.princeton.edu/52trie/TST.java.html
+//Used to store stop names
 public class TST {
     private Node root;   // root of TST
 

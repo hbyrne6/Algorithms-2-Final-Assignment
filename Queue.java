@@ -1,3 +1,5 @@
+//A queue used to store the results of
+//keysWithPrefix from TST.java
 public class Queue
 {
 	Node start = null;

@@ -1,5 +1,5 @@
 
-
+//Holds all the information associated with a stop
 public class StopInfoNode {
 		public int number;
 		public String code;

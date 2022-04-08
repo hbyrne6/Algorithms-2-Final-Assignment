@@ -1,27 +1,50 @@
 
-
+//A list of nodes containing the information about all trips with the
+//same arrival time as the arrival time associated with this list
 public class TripInfoList {
 	
+	//A node containing all the information of a trip, bar its arrival time
+	//as that will be stored by the list it is a part of
 	public static class TripInfo {
 		int tripID;
-		int startTime;
-		int endTime;
-		double totalDistance;
-		StopList stops;
+		String departureTime;
+		int stopID;
+		int stopSequence;
+		String stopHeadsign;
+		int pickupType;
+		int dropOffType;
+		double distance;
 		TripInfo next;
 		
-		TripInfo(int tripID, int time, int stop)
+		TripInfo()
 		{
-			this.tripID = tripID;
-			startTime = time;
-			endTime = time;
-			stops = new StopList();
-			stops.addToList(stop);
+			
+		}
+		
+		@Override
+		public String toString()
+		{
+			return  "Departure Time: " + departureTime + ".\n" + 
+					"Stop ID: " + stopID + ".\n" + 
+					"Stop Sequence: " + stopSequence + ".\n" + 
+					"Stop Headsign: " + stopHeadsign + ".\n" + 
+					"Pickup Type: " + pickupType + ".\n" + 
+					"Drop Off Type: " + dropOffType + ".\n" + 
+					"Distance since first stop: " + distance + ".\n";
 		}
 	}
 	
 	TripInfo start;
 	TripInfo sortedStart;
+	String arrivalTime;
+	
+	TripInfoList(int arrivalTimeInteger)
+	{
+		int hour = (arrivalTimeInteger / 3600);
+		int minute = (arrivalTimeInteger % 3600) / 60;
+		int second = (arrivalTimeInteger % 3600) % 60;
+		arrivalTime = hour + ":" + minute + ":" + second;
+	}
 	
 	public void addTrip(TripInfo newTrip)
 	{
@@ -71,4 +94,19 @@ public class TripInfoList {
             currentTrip.next = tripToSort;
         }
     }
+	
+	@Override
+	public String toString()
+	{
+		String returnString = "";
+		TripInfo currentTrip = start;
+		while(currentTrip != null)
+		{
+			returnString += "Trip ID: " + currentTrip.tripID + ".\n" + 
+							"Arrival Time: " + arrivalTime + ".\n" +
+							currentTrip.toString() + "\n";
+			currentTrip = currentTrip.next;
+		}
+		return returnString;
+	}
 }

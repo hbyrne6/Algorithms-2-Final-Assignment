@@ -1,4 +1,5 @@
 
+//A list of edges, used for an adjacency list
 public class EdgeList {
 	public static class DirectedEdge
     {
