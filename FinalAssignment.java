@@ -254,7 +254,14 @@ public class FinalAssignment {
 					minute = myScanner.nextInt();
 					try
 					{
-						second = Integer.parseInt(myScanner.next().substring(0,2));
+						String nextInput = myScanner.next();
+						if(nextInput.length() - 1 > 2)
+						{
+							System.out.println("Please input the desired time as hh:mm:ss");
+							myScanner.nextLine();
+							continue;
+						}
+						second = Integer.parseInt(nextInput.substring(0,nextInput.length() - 1));
 					} catch(NumberFormatException e) {
 						System.out.println("Please input the desired time as hh:mm:ss");
 						myScanner.nextLine();

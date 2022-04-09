@@ -43,7 +43,8 @@ public class TripInfoList {
 		int hour = (arrivalTimeInteger / 3600);
 		int minute = (arrivalTimeInteger % 3600) / 60;
 		int second = (arrivalTimeInteger % 3600) % 60;
-		arrivalTime = hour + ":" + minute + ":" + second;
+		arrivalTime = hour + ":" + ((minute < 10) ? "0" : "") + minute
+						+ ":" + ((second < 10) ? "0" : "") + second;
 	}
 	
 	public void addTrip(TripInfo newTrip)
